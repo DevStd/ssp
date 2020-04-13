@@ -41,6 +41,8 @@ public class P1ConsoleIO {
 }
 ```
 
+
+
 ## 2. 데이터 처리
 
 ### 2.1 자료입력(1)
@@ -75,6 +77,7 @@ public class P2DataManipulation1 {
     }
 }
 ```
+
 
 ### 2.2 자료입력(2)
 콘솔에서 줄 단위로 점수를 입력 받아 평균을 구하고자 한다.
@@ -119,6 +122,8 @@ public class P2DataManipulation2 {
 }
 ```
 
+
+
 ## 3. 파일 입출력
 파일에서 점수를 입력 받아 평균을 구하고자 한다.
 
@@ -152,6 +157,8 @@ public class P3FileIO {
     }
 }
 ```
+
+
 
 ## 4. 데이터 정렬 및 병합
 
