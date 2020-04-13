@@ -239,7 +239,7 @@ public class P4SortAggregation1 {
 40009
 Q
 ```
-#### 출력예시
+#### 출력 예시
 ```
 화성정밀 사장실 박정석 사장
 화설정밀 국내사업담당 중부영업팀 강민 사원
@@ -256,6 +256,45 @@ public class P4SortAggregation2 {
 
 <br/>
 ## 5. 파일 시스템
+보안담당자 김푸른씨는 보양양식에 맞게 파일 이름이 작성되었는지 검사하는 프로그램을 만들고 있습니다.
 
+```data/ssp_01/q05```디렉토리 안의 모든 하위폴더를 검사해서 다음 규칙에 맞지 않는 파일이름을 출력하세요.
 
+* 보안점검 대상 파일은 확장자가 xlsx, pptx, pdf 인 파일이다.
+* 모든 보안점검 대상 파일이름은 보안규정에 따라 ```S_```또는 ```C_```로 시작해야 한다.
+* 단, 각 폴더에 존재하는 ```except_policy.txt```에 기록된 파일은 보안점검대상에서 제외한다.
+* 해당 폴더 안에 예외파일이 없는 경우 ```except_policy.txt```가 없을 수도 있다.
+* 출력은 화면에 한줄에 파일 1개씩 출력하며, 파일이름순으로 정렬해서 출력한다.
 
+#### 입력폴더 예시
+```
+  q05
+    │  except_policy.txt
+    │  E_Requrements.xlsx
+    │  HIS_Board_specfications.pdf
+    │  Memo.txt
+    │  S_System_Management.pptx
+    │
+    ├─data
+    │      CoPromotion_20190102.xlsx
+    │      C_Experiments_20200405.pptx
+    │      except_policy.txt
+    │      Power_Consumptions.xlsx
+    │
+    └─specs
+            UPS_specfications.pdf
+```
+#### 출력 예시
+```
+CoPromotion_20190102.xlsx
+E_Requrements.xlsx
+UPS_specfications.pdf
+```
+#### 코드
+```java
+public class P5FileSystem {
+    public static void main(String[] args) {
+
+    }
+}
+```
