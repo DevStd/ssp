@@ -9,8 +9,8 @@
 title:       Type
 email:       ''
 description: ''
-baseurl:     '' # The subpath of your site, e.g. /blog
-url:         'https://devstd.github.io/ssp' # The base hostname & protocol for your site
+baseurl:     '/ssp' # The subpath of your site, e.g. /blog
+url:         'https://devstd.github.io/ssp/' # The base hostname & protocol for your site
 twitter:     ''
 github:      'https://github.com/DevStd/ssp'
 instagram:   ''
