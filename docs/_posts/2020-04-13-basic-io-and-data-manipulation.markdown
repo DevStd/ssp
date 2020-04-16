@@ -35,9 +35,26 @@ Q
 #### 코드
 ```java
 public class P1ConsoleIO {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        
+        Scanner sc = new Scanner(System.in);
+        String line;
+        int cnt = 0, sum = 0;
+        
+        while((line=sc.nextLine()) != null) {
+            if("Q".equals(line)) {
+                break;
+            } else {
+                sum += Integer.valueOf(line);
+                cnt++;
+            }
+        }
+        
+        System.out.println(sum);
+        System.out.println(Double.valueOf(sum)/cnt);
     }
+
 }
 ```
 
@@ -71,8 +88,69 @@ Q
 #### 코드
 ```java
 public class P2DataManipulation1 {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        ArrayList<Score> scores = new ArrayList<>();
+        
+        Scanner sc = new Scanner(System.in);
+        String line;
+        
+        while((line=sc.nextLine()) != null) {
+            if("Q".equals(line)) {
+                break;
+            } else if(line.startsWith("M")) {
+                scores.add(Score.parseM(line));
+            }
+        }
+        
+        double sum = 0;
+        for(int i = 0 ; i < scores.size() ; i++) sum += scores.get(i).total;
+        System.out.println(sum/scores.size());
+    }
+}
+
+public class Score{
+    String test;    //구분
+    String year;        //년도
+    String seq;     //회차
+    int testNum;    //수험번호
+    int score1;     //필기점수
+    int score2;     //실기점수
+    int total;      //종합점수
+    public Score(String test, String year, String seq, int testNum, int score1, int score2) {
+        super();
+        this.test = test;
+        this.year = year;
+        this.seq = seq;
+        this.testNum = testNum;
+        this.score1 = score1;
+        this.score2 = score2;
+        this.total = score1+score2;
+    }
+    
+    public static Score parseM(String line) {
+        String[] item = line.split("#");
+        Score s = new Score(
+                item[0], 
+                item[1], 
+                item[2], 
+                Integer.parseInt(item[3]), 
+                Integer.parseInt(item[4]), 
+                Integer.parseInt(item[5]));
+        return s;
+    }
+    
+    public static Score parseL(String line) {
+        //L 2020 1 40001 80 20
+        //0 1234 5 67890 11 13
+        Score s = new Score(
+                line.substring(0,1),
+                line.substring(1,5),
+                line.substring(5,6),
+                Integer.parseInt(line.substring(6,11)),
+                Integer.parseInt(line.substring(11,13)),
+                Integer.parseInt(line.substring(13,15)));
+        return s;
     }
 }
 ```
@@ -115,9 +193,32 @@ Q
 #### 코드
 ```java
 public class P2DataManipulation2 {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        ArrayList<Score> scoresM = new ArrayList<>();
+        ArrayList<Score> scoresL = new ArrayList<>();
+        
+        Scanner sc = new Scanner(System.in);
+        String line;
+        
+        while((line=sc.nextLine()) != null) {
+            if("Q".equals(line)) {
+                break;
+            } else if(line.startsWith("M")) {
+                scoresM.add(Score.parseM(line));
+            } else if(line.startsWith("L")) {
+                scoresL.add(Score.parseL(line));
+            }
+        }
+        
+        double sumM = 0, sumL = 0;
+        for(Score s : scoresM) sumM += s.total;
+        for(Score s : scoresL) sumL += s.total;
+        
+        System.out.println(sumM/scoresM.size());
+        System.out.println(sumL/scoresL.size());
     }
+
 }
 ```
 
@@ -150,9 +251,33 @@ M#2020#1#40005#70#10
 #### 코드
 ```java
 public class P3FileIO {
+
     public static void main(String[] args) {
 
+        String filename = "data/ssp_01/score.txt";
+        
+        ArrayList<Score> scoresM = new ArrayList<>();
+        ArrayList<Score> scoresL = new ArrayList<>();
+        
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))){
+            String line;
+            while((line = br.readLine()) != null){
+                if(line.startsWith("M")) {
+                    scoresM.add(Score.parseM(line));
+                } else if(line.startsWith("L")) {
+                    scoresL.add(Score.parseL(line));
+                }
+            }
+        } catch (Exception e) {}
+        
+        double sumM = 0, sumL = 0;
+        for(Score s : scoresM) sumM += s.total;
+        for(Score s : scoresL) sumL += s.total;
+        
+        System.out.println(sumM/scoresM.size());
+        System.out.println(sumL/scoresL.size());
     }
+
 }
 ```
 
@@ -195,9 +320,39 @@ M#2020#1#40009#50#10
 #### 코드
 ```java
 public class P4SortAggregation1 {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        String filename = "data/ssp_01/score2.txt";
+        
+        ArrayList<Score> scoresM = new ArrayList<>();
+        
+        // File input
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))){
+            String line;
+            while((line = br.readLine()) != null){
+                if(line.startsWith("M")) {
+                    scoresM.add(Score.parseM(line));
+                } 
+            }
+        } catch (Exception e) {}
+        
+        // Sort
+        Collections.sort(scoresM, new Comparator<Score>() {
+            @Override
+            public int compare(Score o1, Score o2) {
+                if(o1.total != o2.total) return o2.total - o1.total;
+                else if(o1.score1 != o2.score1) return o2.score1 - o1.score1;
+                else return o1.testNum - o2.testNum;
+            }
+        });
+        
+        // Print result
+        for(int i = 0 ; i < 3 ; i++) {
+            Score s = scoresM.get(i);
+            System.out.println(s.testNum+","+s.total);
+        }
     }
+
 }
 ```
 
@@ -247,8 +402,87 @@ Q
 #### 코드
 ```java
 public class P4SortAggregation2 {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+        
+        String deptFile = "data/ssp_01/dept.txt";
+        String empFile = "data/ssp_01/emp.txt";
+        
+        HashMap<String, Dept> dept = EmpUtil.readDeptFile(deptFile);
+        HashMap<String, Emp> emp = EmpUtil.readEmpFile(empFile);
+        
+        Scanner sc = new Scanner(System.in);
+        String line;
+        while((line=sc.nextLine())!= null) {
+            if("Q".equals(line)) {
+                break;
+            } else {
+                Emp e = emp.get(line);
+                if(e == null) continue;
+                
+                String deptNm = EmpUtil.getEntireDept(dept, e.deptNo);
+                
+                System.out.println(deptNm + " " + e.name + " " + e.position);
+            }
+        }
+    }
+}
+
+public class Dept {
+    String no;
+    String name;
+    String upperNo;
+    public Dept(String no, String name, String upperNo) {
+        super();
+        this.no = no;
+        this.name = name;
+        this.upperNo = upperNo;
+    }
+}
+
+public class Emp {
+    String no;
+    String name;
+    String position;
+    String deptNo;
+    public Emp(String no, String name, String position, String deptNo) {
+        super();
+        this.no = no;
+        this.name = name;
+        this.position = position;
+        this.deptNo = deptNo;
+    }
+}
+
+public class EmpUtil{
+    public static HashMap<String, Dept> readDeptFile(String filename){
+        HashMap<String, Dept> dept = new HashMap<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))){
+            String line;
+            while((line = br.readLine()) != null){
+                String[] d = line.split("#");
+                dept.put(d[0], new Dept(d[0], d[1], d[2]));
+            }
+        } catch (Exception e) {}
+        return dept;
+    }
+    
+    public static HashMap<String, Emp> readEmpFile(String filename){
+        HashMap<String, Emp> emp = new HashMap<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))){
+            String line;
+            while((line = br.readLine()) != null){
+                String[] e = line.split("#");
+                emp.put(e[0], new Emp(e[0], e[1], e[2], e[3]));
+            }
+        } catch (Exception e) {}
+        return emp;
+    }
+    
+    public static String getEntireDept(HashMap<String, Dept> dept, String deptNo) {
+        Dept d = dept.get(deptNo);
+        if("0".equals(d.upperNo)) return d.name;
+        else return getEntireDept(dept, d.upperNo) + " " + d.name;
     }
 }
 ```
@@ -294,7 +528,58 @@ UPS_specfications.pdf
 ```java
 public class P5FileSystem {
     public static void main(String[] args) {
+        String checkRoot = "data/ssp_01/q05";
 
+        ArrayList<String> result = checkSecurity(checkRoot);
+        Collections.sort(result);
+        
+        for(int i = 0 ; i < result.size() ; i++) {
+            System.out.println(result.get(i));
+        }
+    }
+    
+    // 파일 보안 점검
+    private static ArrayList<String> checkSecurity(String root){
+        ArrayList<String> result = new ArrayList<>();
+        
+        String[] list = new File(root).list();
+        for(String fn : list) {
+            HashSet<String> exList = exceptList(root);          
+            String fullPath = root + File.separatorChar + fn;
+            
+            if(new File(fullPath).isDirectory()) {
+                // 하위폴더 점검
+                ArrayList<String> subDirResult = checkSecurity(fullPath);
+                result.addAll(subDirResult);
+            } else {
+                // 파일 점검
+                if((fn.endsWith(".xlsx") || fn.endsWith(".pptx") || fn.endsWith(".pdf"))
+                    && !(fn.startsWith("S_") || fn.startsWith("C_"))
+                    && !exList.contains(fn)) {
+                    // 위반 파일
+                    result.add(fn);
+                }               
+            }
+        }
+        
+        return result;
+    }
+    
+    // 예외파일 목록 읽기
+    private static HashSet<String> exceptList(String dirName){
+        HashSet<String> exSet = new HashSet<>();
+        
+        File exFile = new File(dirName + File.separatorChar + "except_policy.txt");
+        if(exFile.exists()) {
+            try(BufferedReader br = new BufferedReader(new FileReader(exFile))){
+                String line;
+                while((line=br.readLine())!= null) {
+                    exSet.add(line);
+                }
+            } catch(Exception e) {}
+        }
+        
+        return exSet;
     }
 }
 ```
