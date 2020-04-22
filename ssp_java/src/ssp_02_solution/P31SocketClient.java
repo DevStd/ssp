@@ -64,7 +64,7 @@ public class P31SocketClient {
 			}
 			
 			//전송종료
-			System.out.println("END");
+			System.out.println("END#"+file.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
